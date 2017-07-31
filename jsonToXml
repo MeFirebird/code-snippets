@@ -1,0 +1,5 @@
+function jsonToXml(json){
+		if(typeof json ==="undefined" || json === null || Object.keys(json).length === 0){
+				return "";
+		}
+	}
