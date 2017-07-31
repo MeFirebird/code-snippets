@@ -1,5 +1,21 @@
+一：前言 Pre
+1.typeof在两种情况下会返回"undefined":一个变量没有被声明的时候,和一个变量的值是undefined的时候.
+  所以判断一个
+2.isDefined() (比如Object.isDefined()): 可以作为一个函数或者一个运算符
+  function isDefined(x) {
+    return x !== null && x !== undefined;
+}
+3.undefined、null、布尔值（Boolean）、字符串（String）、数值（Number）、对象（Object）
+  typeof原声数据类型的结果？　　
+4.数据类型　　大小写？　　　　drag API 
+5.node中alert有用吗？　　试试
+
+
+
+
+
 function jsonToXml(json){
-	        // 代码要写注释哦    typeof为undefined  null说明什么？
+	        //  值和类型都是undefined   或    值为null     变量的值为undefined null，这说明什么？！！！！
 		if(typeof json ==="undefined" || json === null || Object.keys(json).length === 0){
 				return "";
 		}
@@ -45,3 +61,7 @@ function translator(json) {
 			return `<${json.type}${props} data-_id=${json._id} data-type=${json.type} draggable="true"></${json.type}>`;
 		}
 	}
+	
+
+
+	
