@@ -1,5 +1,47 @@
 function jsonToXml(json){
+	        // 代码要写注释哦    typeof为undefined  null说明什么？
 		if(typeof json ==="undefined" || json === null || Object.keys(json).length === 0){
 				return "";
+		}
+}
+	
+function translator(json) {
+		let props = Object.keys(json).reduce((acc, cur) => {
+			if(cur !== 'type' && cur !== 'child') {
+				// 处理Style类型
+				// 这里双引号做了一个简单的转义
+				if(cur === 'style') {
+					return acc += ` :${cur != "ctype" ? cur : "type"}="${swapStr(JSON.stringify(json[cur]),'"',"'")}"`;
+				}
+
+				if(cur === 'events') {
+					for(const key in json[cur]) {
+						acc += ` @${key}='onEventTrigger($event,${JSON.stringify(json[cur][key])})' `;
+					}
+					return acc;
+				}
+
+				// number型和boolean型绑定数据的特殊处理
+				else if(_.isNumber(json[cur]) || _.isBoolean(json[cur])) {
+					return acc += ` :${cur != "ctype" ? cur : "type"}=${json[cur]}`;
+				} else {
+					return acc += ` ${cur != "ctype" ? cur : "type"}="${json[cur]}"`;
+				}
+			}
+
+			return acc;
+		}, "");
+		if(typeof json.child !== "undefined" && json.child.length !== 0) {
+			return `<${json.type}${props}>
+                    ${json.child.map(i => translator(i)).reduce((acc, cur) => acc += cur, "")}
+                </${json.type}>`;
+		} else {
+			if(json.type === 'Text') {
+				return `${json.text}`;
+			}
+			if(json.type === 'text') {
+				return `<span ${props} data-type=${json.type} draggable="true">${json.text}</span>`;
+			}
+			return `<${json.type}${props} data-_id=${json._id} data-type=${json.type} draggable="true"></${json.type}>`;
 		}
 	}
