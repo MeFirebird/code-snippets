@@ -1,0 +1,3 @@
+getBoundingClientRect()
+
+    这个方法返回一个矩形对象，包含四个属性：left、top、right和bottom。分别表示元素各边与页面上边和左边的距离。
