@@ -1,0 +1,117 @@
+http://www.cnblogs.com/bhaltair/p/5929157.html      爬虫
+
+
+var http = require('https');
+// 豆瓣网站添加了https，所以用http模块就抓不到数据了，把http模块换成https模块，并且不得指定80端口，这里无需指定端口，https模块会默认使用443端口。
+var fs = require('fs');
+var path = require('path');
+
+var cheerio = require('cheerio');
+// 使用npm install cheerio --save 来安装 加入--sava参数，项目对于此包的依赖就会写入package.json中
+// 这里不需要全局安装，所以不需要-g参数
+var request = require('request');
+
+var movies = [];
+// 爬虫的URL信息
+//
+var num=0;
+function getData(startNum) {
+    var opt = {
+        hostname: 'movie.douban.com',
+        path: '/top250?start=' + startNum + '&filter=',
+        // port : 80,
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.117 Safari/537.36'
+        }
+    };
+
+
+    http.get(opt, function(res) {
+        var html = '';
+
+        res.setEncoding('utf-8');
+
+        res.on('data', function(chunk) {
+            html += chunk;
+        });
+
+        res.on('end', function() {
+            // 真正的处理在这里
+
+            var $ = cheerio.load(html);
+
+            $('.item').each(function() {
+                var info = $(".bd p", this).text().replace(/\s+/g, "");
+                var actor = $(".bd p", this).text();
+                var temp,temp2;
+                info.replace(/([\u2E80-\u9FFF\:\·]+)/, function(match, $1, $2) {
+                    temp = $1;
+                    temp2 = $2;
+                });
+
+                var movie = {
+                    title: $('.title', this).eq(0).text(),
+                    director: temp,
+                    actor: temp2,
+                    year: /\d+/g.exec(info).toString(),
+                    star: $('.info .star .rating_num', this).text(),
+                    quote: $(".quote .inq", this).text(),
+                    picURL: $('.pic img', this).attr('src')
+                };
+                movies.push(movie);
+                saveImg('img/',movie.picURL,movie.title);
+            });
+            // console.log(movies);
+            if(num<=25)
+                getData(num+=5);
+
+        })
+        // 还可以是txt
+        // 调用10次，每次
+        saveData('data/data.json', movies);
+
+    }).on('error', function(err) {
+        console.log(err);
+    })
+}
+
+getData(0);
+
+/**
+ * [saveData description]
+ * @param  {[type]} path   [保存数据的文件夹]
+ * @param  {[type]} movies [数据]
+ * @return {[type]}        [description]
+ */
+function saveData(path, movies) {
+    fs.writeFile(path, JSON.stringify(movies), function(err) {
+        if (err) {
+            return console.log(err);
+        }else {
+
+            console.log("Data saved");
+        }
+    })
+}
+
+// 保存图片函数
+function saveImg(imgDir, url,title) {
+    http.get(url, function(res) {
+        var data = '';
+        res.setEncoding('binary');
+        res.on('data', function(chunk) {
+            data += chunk;
+        });
+        res.on('end', function() {
+            //  path.basename(url)
+            fs.writeFile(imgDir + title + '.jpg', data, 'binary', function(err) {
+                if (err) {
+                    return console.log(err);
+                }
+                console.log('image downloaded', title + '.jpg');
+            });
+        })
+    }).on('error', function(err) {
+        console.log(err);
+    })
+}
