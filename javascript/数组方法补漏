@@ -1,1 +1,23 @@
 一：数组去重
+
+
+
+
+
+二：排序
+  /**
+     *  对字符串数组执行不区分大小分的字母表排序
+     */
+    const a = ['ant','Bug','cat','Dog'];
+    a.sort();
+    a.sort(function(s,t){
+        var a = s.toLowerCase();
+        var b = t.toLowerCase();
+        if(a < b){
+            return -1;
+        }
+        if(a > b){
+            return 1
+        }
+        return 0;
+    });
