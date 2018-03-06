@@ -1,5 +1,12 @@
 一：数组去重
+    /**
+     * 
+     * 方案一： 扩展运算符 +　Set
+     */
 
+    let arr = [2,3,2,5,7,3];
+    let unique = [...new Set(arr)];
+    console.log(unique)
 
 
 
