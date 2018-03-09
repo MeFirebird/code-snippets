@@ -7,6 +7,14 @@
     let arr = [2,3,2,5,7,3];
     let unique = [...new Set(arr)];
     console.log(unique)
+    
+    /**
+     * 方案二：Array.from
+     */
+    function dedupe(array){
+        return Array.from(new Set(array));
+    }
+
 
 
 
