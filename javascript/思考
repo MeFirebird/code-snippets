@@ -1,0 +1,8 @@
+
+    let arr = [3,5,7];
+    arr.foo = 'hello';
+
+    console.log(arr);
+
+
+//    let arr = [3,5,7,foo: "hello"];    为什么这样直接写编译都过不了   而上面那样写是可以正常输出？    编译时运行时的区别吗？
