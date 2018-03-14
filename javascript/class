@@ -11,5 +11,5 @@ let  person = new class{
         }
     }('sandy');   //  这里
 
-    console.log(person.sayName())    // sayName方法执行完就销毁  所以这里打印得到的是undefined
+    console.log(person.sayName())    // 打印的是sayName()方法的返回值， sayName方法无返回值，所以为undefined
 
