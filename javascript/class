@@ -1,0 +1,15 @@
+一： 作用域与生命周期
+let  person = new class{
+
+        constructor(name){
+            this.name = name;
+        }
+
+        sayName(){
+            console.log(this.name);
+            return 'end'
+        }
+    }('sandy');   //  这里
+
+    console.log(person.sayName())    // sayName方法执行完就销毁  所以这里打印得到的是undefined
+
